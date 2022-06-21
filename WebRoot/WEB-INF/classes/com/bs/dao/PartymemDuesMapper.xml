@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bs.dao.PartymemDuesMapper" >
+  <resultMap id="BaseResultMap" type="com.bs.bean.PartymemDues" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="organization_name" property="organizationName" jdbcType="VARCHAR" />
+    <result column="partymem_name" property="partymemName" jdbcType="VARCHAR" />
+    <result column="partymem_id" property="partymemId" jdbcType="INTEGER" />
+    <result column="particular_year" property="particularYear" jdbcType="VARCHAR" />
+    <result column="january" property="january" jdbcType="VARCHAR" />
+    <result column="february" property="february" jdbcType="VARCHAR" />
+    <result column="march" property="march" jdbcType="VARCHAR" />
+    <result column="april" property="april" jdbcType="VARCHAR" />
+    <result column="may" property="may" jdbcType="VARCHAR" />
+    <result column="june" property="june" jdbcType="VARCHAR" />
+    <result column="july" property="july" jdbcType="VARCHAR" />
+    <result column="august" property="august" jdbcType="VARCHAR" />
+    <result column="september" property="september" jdbcType="VARCHAR" />
+    <result column="october" property="october" jdbcType="VARCHAR" />
+    <result column="november" property="november" jdbcType="VARCHAR" />
+    <result column="december" property="december" jdbcType="VARCHAR" />
+    <association property="partymem" javaType="com.bs.bean.PartymemInformation">
+      <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="organization_name" property="organizationName" jdbcType="VARCHAR" />
+    <result column="partymem_name" property="partymemName" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    partymem_dues.id, partymem_dues.organization_name, partymem_dues.partymem_name, partymem_dues.particular_year, partymem_dues.january, partymem_dues.february, partymem_dues.march, 
+    partymem_dues.april, partymem_dues.may, partymem_dues.june, partymem_dues.july, partymem_dues.august, partymem_dues.september, partymem_dues.october, partymem_dues.november, partymem_dues.december
+  </sql>
+  <sql id="Partymem_Column_List" >
+    partymem_information.id, partymem_information.organization_name, partymem_information.partymem_name
+  </sql>
+  <sql id="condition_where">
+		<where>
+		    <if test="oname != null and oname != ''">
+				and organization_name like '%${oname}%'
+			</if>
+			<if test="name != null and name != ''">
+				and partymem_name=#{name}
+			</if>
+			<if test="birth != null and birth != ''">
+				and birthday=#{birth}
+			</if>
+			<if test="joiningtime != null and joiningtime != ''">
+				and joining_partytime=#{joiningtime}
+			</if>
+			<if test="originphone != null and originphone != ''">
+				and originalinstitution_phone=#{originphone}
+			</if>
+			<if test="originname != null and originname != ''">
+				and originalinstitution_name=#{originname}
+			</if>
+			<if test="inftime != null and inftime != ''">
+				and inflow_time=#{inftime}
+			</if>
+		</where>
+	</sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bs.bean.PartymemDuesExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from partymem_dues
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from partymem_dues
+    <include refid="condition_where"></include>
+    limit #{start}, #{size}
+  </select>
+  <select id="count" resultType="java.lang.Integer" parameterType="java.lang.Integer" >
+    select count(*)
+    <include refid="Base_Column_List" />
+    from partymem_dues
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from partymem_dues
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPartymemId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />,
+    <include refid="Partymem_Column_List" />
+    from partymem_dues
+    LEFT JOIN partymem_information on  partymem_information.id = partymem_dues.partymem_id
+    where partymem_dues.partymem_id = #{record.partymemId,jdbcType=INTEGER}
+    <if test="record.particularYear != null and record.particularYear != ''">
+				and particular_year=#{record.particularYear}
+			</if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from partymem_dues
+    where id = #{id,jdbcType=INTEGER}
+
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bs.bean.PartymemDuesExample" >
+    delete from partymem_dues
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bs.bean.PartymemDues" >
+    insert into partymem_dues (id, organization_name, partymem_name, 
+      particular_year, january, february, 
+      march, april, may, 
+      june, july, august, 
+      september, october, november, 
+      december,partymem_id)
+    values (#{id,jdbcType=INTEGER}, #{organizationName,jdbcType=VARCHAR}, #{partymemName,jdbcType=VARCHAR}, 
+      #{particularYear,jdbcType=VARCHAR}, #{january,jdbcType=VARCHAR}, #{february,jdbcType=VARCHAR}, 
+      #{march,jdbcType=VARCHAR}, #{april,jdbcType=VARCHAR}, #{may,jdbcType=VARCHAR}, 
+      #{june,jdbcType=VARCHAR}, #{july,jdbcType=VARCHAR}, #{august,jdbcType=VARCHAR}, 
+      #{september,jdbcType=VARCHAR}, #{october,jdbcType=VARCHAR}, #{november,jdbcType=VARCHAR}, 
+      #{december,jdbcType=VARCHAR},#{partymemId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bs.bean.PartymemDues" >
+    insert into partymem_dues
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="organizationName != null" >
+        organization_name,
+      </if>
+      <if test="partymemName != null" >
+        partymem_name,
+      </if>
+      <if test="particularYear != null" >
+        particular_year,
+      </if>
+      <if test="january != null" >
+        january,
+      </if>
+      <if test="february != null" >
+        february,
+      </if>
+      <if test="march != null" >
+        march,
+      </if>
+      <if test="april != null" >
+        april,
+      </if>
+      <if test="may != null" >
+        may,
+      </if>
+      <if test="june != null" >
+        june,
+      </if>
+      <if test="july != null" >
+        july,
+      </if>
+      <if test="august != null" >
+        august,
+      </if>
+      <if test="september != null" >
+        september,
+      </if>
+      <if test="october != null" >
+        october,
+      </if>
+      <if test="november != null" >
+        november,
+      </if>
+      <if test="december != null" >
+        december,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="organizationName != null" >
+        #{organizationName,jdbcType=VARCHAR},
+      </if>
+      <if test="partymemName != null" >
+        #{partymemName,jdbcType=VARCHAR},
+      </if>
+      <if test="particularYear != null" >
+        #{particularYear,jdbcType=VARCHAR},
+      </if>
+      <if test="january != null" >
+        #{january,jdbcType=VARCHAR},
+      </if>
+      <if test="february != null" >
+        #{february,jdbcType=VARCHAR},
+      </if>
+      <if test="march != null" >
+        #{march,jdbcType=VARCHAR},
+      </if>
+      <if test="april != null" >
+        #{april,jdbcType=VARCHAR},
+      </if>
+      <if test="may != null" >
+        #{may,jdbcType=VARCHAR},
+      </if>
+      <if test="june != null" >
+        #{june,jdbcType=VARCHAR},
+      </if>
+      <if test="july != null" >
+        #{july,jdbcType=VARCHAR},
+      </if>
+      <if test="august != null" >
+        #{august,jdbcType=VARCHAR},
+      </if>
+      <if test="september != null" >
+        #{september,jdbcType=VARCHAR},
+      </if>
+      <if test="october != null" >
+        #{october,jdbcType=VARCHAR},
+      </if>
+      <if test="november != null" >
+        #{november,jdbcType=VARCHAR},
+      </if>
+      <if test="december != null" >
+        #{december,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bs.bean.PartymemDuesExample" resultType="java.lang.Integer" >
+    select count(*) from partymem_dues
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update partymem_dues
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.organizationName != null" >
+        organization_name = #{record.organizationName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.partymemName != null" >
+        partymem_name = #{record.partymemName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.particularYear != null" >
+        particular_year = #{record.particularYear,jdbcType=VARCHAR},
+      </if>
+      <if test="record.january != null" >
+        january = #{record.january,jdbcType=VARCHAR},
+      </if>
+      <if test="record.february != null" >
+        february = #{record.february,jdbcType=VARCHAR},
+      </if>
+      <if test="record.march != null" >
+        march = #{record.march,jdbcType=VARCHAR},
+      </if>
+      <if test="record.april != null" >
+        april = #{record.april,jdbcType=VARCHAR},
+      </if>
+      <if test="record.may != null" >
+        may = #{record.may,jdbcType=VARCHAR},
+      </if>
+      <if test="record.june != null" >
+        june = #{record.june,jdbcType=VARCHAR},
+      </if>
+      <if test="record.july != null" >
+        july = #{record.july,jdbcType=VARCHAR},
+      </if>
+      <if test="record.august != null" >
+        august = #{record.august,jdbcType=VARCHAR},
+      </if>
+      <if test="record.september != null" >
+        september = #{record.september,jdbcType=VARCHAR},
+      </if>
+      <if test="record.october != null" >
+        october = #{record.october,jdbcType=VARCHAR},
+      </if>
+      <if test="record.november != null" >
+        november = #{record.november,jdbcType=VARCHAR},
+      </if>
+      <if test="record.december != null" >
+        december = #{record.december,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update partymem_dues
+    set id = #{record.id,jdbcType=INTEGER},
+      organization_name = #{record.organizationName,jdbcType=VARCHAR},
+      partymem_name = #{record.partymemName,jdbcType=VARCHAR},
+      particular_year = #{record.particularYear,jdbcType=VARCHAR},
+      january = #{record.january,jdbcType=VARCHAR},
+      february = #{record.february,jdbcType=VARCHAR},
+      march = #{record.march,jdbcType=VARCHAR},
+      april = #{record.april,jdbcType=VARCHAR},
+      may = #{record.may,jdbcType=VARCHAR},
+      june = #{record.june,jdbcType=VARCHAR},
+      july = #{record.july,jdbcType=VARCHAR},
+      august = #{record.august,jdbcType=VARCHAR},
+      september = #{record.september,jdbcType=VARCHAR},
+      october = #{record.october,jdbcType=VARCHAR},
+      november = #{record.november,jdbcType=VARCHAR},
+      december = #{record.december,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bs.bean.PartymemDues" >
+    update partymem_dues
+    <set >
+      <if test="organizationName != null" >
+        organization_name = #{organizationName,jdbcType=VARCHAR},
+      </if>
+      <if test="partymemName != null" >
+        partymem_name = #{partymemName,jdbcType=VARCHAR},
+      </if>
+      <if test="particularYear != null" >
+        particular_year = #{particularYear,jdbcType=VARCHAR},
+      </if>
+      <if test="january != null" >
+        january = #{january,jdbcType=VARCHAR},
+      </if>
+      <if test="february != null" >
+        february = #{february,jdbcType=VARCHAR},
+      </if>
+      <if test="march != null" >
+        march = #{march,jdbcType=VARCHAR},
+      </if>
+      <if test="april != null" >
+        april = #{april,jdbcType=VARCHAR},
+      </if>
+      <if test="may != null" >
+        may = #{may,jdbcType=VARCHAR},
+      </if>
+      <if test="june != null" >
+        june = #{june,jdbcType=VARCHAR},
+      </if>
+      <if test="july != null" >
+        july = #{july,jdbcType=VARCHAR},
+      </if>
+      <if test="august != null" >
+        august = #{august,jdbcType=VARCHAR},
+      </if>
+      <if test="september != null" >
+        september = #{september,jdbcType=VARCHAR},
+      </if>
+      <if test="october != null" >
+        october = #{october,jdbcType=VARCHAR},
+      </if>
+      <if test="november != null" >
+        november = #{november,jdbcType=VARCHAR},
+      </if>
+      <if test="december != null" >
+        december = #{december,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bs.bean.PartymemDues" >
+    update partymem_dues
+    set organization_name = #{organizationName,jdbcType=VARCHAR},
+      partymem_name = #{partymemName,jdbcType=VARCHAR},
+      particular_year = #{particularYear,jdbcType=VARCHAR},
+      january = #{january,jdbcType=VARCHAR},
+      february = #{february,jdbcType=VARCHAR},
+      march = #{march,jdbcType=VARCHAR},
+      april = #{april,jdbcType=VARCHAR},
+      may = #{may,jdbcType=VARCHAR},
+      june = #{june,jdbcType=VARCHAR},
+      july = #{july,jdbcType=VARCHAR},
+      august = #{august,jdbcType=VARCHAR},
+      september = #{september,jdbcType=VARCHAR},
+      october = #{october,jdbcType=VARCHAR},
+      november = #{november,jdbcType=VARCHAR},
+      december = #{december,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

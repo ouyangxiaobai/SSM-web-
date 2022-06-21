@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bs.dao.LifeFileMapper" >
+  <resultMap id="BaseResultMap" type="com.bs.bean.LifeFile" >
+    <id column="id" property="fid" jdbcType="INTEGER" />
+    <result column="contentfile" property="contentfile" jdbcType="VARCHAR" />
+    <result column="olifeid" property="olifeid" jdbcType="INTEGER" />
+    <result column="filetype" property="filetype" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, contentfile, olifeid, filetype
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bs.bean.LifeFileExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from life_file
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from life_file
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAllByoid" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from life_file
+    where olifeid = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByoid" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from life_file
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from life_file
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bs.bean.LifeFileExample" >
+    delete from life_file
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bs.bean.LifeFile" >
+    insert into life_file (id, contentfile, olifeid, 
+      filetype)
+    values (#{fid,jdbcType=INTEGER}, #{contentfile,jdbcType=VARCHAR}, #{olifeid,jdbcType=INTEGER}, 
+      #{filetype,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bs.bean.LifeFile" >
+    insert into life_file
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="contentfile != null" >
+        contentfile,
+      </if>
+      <if test="olifeid != null" >
+        olifeid,
+      </if>
+      <if test="filetype != null" >
+        filetype,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="contentfile != null" >
+        #{contentfile,jdbcType=VARCHAR},
+      </if>
+      <if test="olifeid != null" >
+        #{olifeid,jdbcType=INTEGER},
+      </if>
+      <if test="filetype != null" >
+        #{filetype,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bs.bean.LifeFileExample" resultType="java.lang.Integer" >
+    select count(*) from life_file
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update life_file
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.contentfile != null" >
+        contentfile = #{record.contentfile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.olifeid != null" >
+        olifeid = #{record.olifeid,jdbcType=INTEGER},
+      </if>
+      <if test="record.filetype != null" >
+        filetype = #{record.filetype,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update life_file
+    set id = #{record.id,jdbcType=INTEGER},
+      contentfile = #{record.contentfile,jdbcType=VARCHAR},
+      olifeid = #{record.olifeid,jdbcType=INTEGER},
+      filetype = #{record.filetype,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bs.bean.LifeFile" >
+    update life_file
+    <set >
+      <if test="contentfile != null" >
+        contentfile = #{contentfile,jdbcType=VARCHAR},
+      </if>
+      <if test="olifeid != null" >
+        olifeid = #{olifeid,jdbcType=INTEGER},
+      </if>
+      <if test="filetype != null" >
+        filetype = #{filetype,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bs.bean.LifeFile" >
+    update life_file
+    set contentfile = #{contentfile,jdbcType=VARCHAR},
+      olifeid = #{olifeid,jdbcType=INTEGER},
+      filetype = #{filetype,jdbcType=VARCHAR}
+    where id = #{fid,jdbcType=INTEGER}
+  </update>
+</mapper>

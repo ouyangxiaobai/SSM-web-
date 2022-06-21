@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bs.dao.ReviewMapper" >
+  <resultMap id="BaseResultMap" type="com.bs.bean.Review" >
+    <id column="reid" property="reid" jdbcType="INTEGER" />
+    <result column="recontent" property="recontent" jdbcType="VARCHAR" />
+    <result column="reviewtime" property="reviewtime" jdbcType="VARCHAR" />
+    <result column="reuid" property="reuid" jdbcType="INTEGER" />
+    <result column="mid" property="mid" jdbcType="VARCHAR" />
+     <association property="user" javaType="com.bs.bean.User">
+      <result column="username" property="username" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    reid, recontent, reviewtime, reuid, mid
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bs.bean.ReviewExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from review
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from review
+    where reid = #{reid,jdbcType=INTEGER}
+  </select>
+  <select id="count" resultType="java.lang.Integer" parameterType="java.lang.Integer" >
+    select count(*)
+    from review
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from review
+    limit #{start}, #{size}
+  </select>
+  <select id="showReview" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />,
+    user.username
+    from review
+    LEFT JOIN user on  user.id = review.reuid
+    where mid = #{mid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from review
+    where reid = #{reid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bs.bean.ReviewExample" >
+    delete from review
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bs.bean.Review" >
+    insert into review (reid, recontent, reviewtime, 
+      reuid, mid)
+    values (#{reid,jdbcType=INTEGER}, #{recontent,jdbcType=VARCHAR}, #{reviewtime,jdbcType=VARCHAR}, 
+      #{reuid,jdbcType=INTEGER}, #{mid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bs.bean.Review" >
+    insert into review
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="reid != null" >
+        reid,
+      </if>
+      <if test="recontent != null" >
+        recontent,
+      </if>
+      <if test="reviewtime != null" >
+        reviewtime,
+      </if>
+      <if test="reuid != null" >
+        reuid,
+      </if>
+      <if test="mid != null" >
+        mid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="reid != null" >
+        #{reid,jdbcType=INTEGER},
+      </if>
+      <if test="recontent != null" >
+        #{recontent,jdbcType=VARCHAR},
+      </if>
+      <if test="reviewtime != null" >
+        #{reviewtime,jdbcType=VARCHAR},
+      </if>
+      <if test="reuid != null" >
+        #{reuid,jdbcType=INTEGER},
+      </if>
+      <if test="mid != null" >
+        #{mid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bs.bean.ReviewExample" resultType="java.lang.Integer" >
+    select count(*) from review
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update review
+    <set >
+      <if test="record.reid != null" >
+        reid = #{record.reid,jdbcType=INTEGER},
+      </if>
+      <if test="record.recontent != null" >
+        recontent = #{record.recontent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reviewtime != null" >
+        reviewtime = #{record.reviewtime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reuid != null" >
+        reuid = #{record.reuid,jdbcType=INTEGER},
+      </if>
+      <if test="record.mid != null" >
+        mid = #{record.mid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update review
+    set reid = #{record.reid,jdbcType=INTEGER},
+      recontent = #{record.recontent,jdbcType=VARCHAR},
+      reviewtime = #{record.reviewtime,jdbcType=VARCHAR},
+      reuid = #{record.reuid,jdbcType=INTEGER},
+      mid = #{record.mid,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bs.bean.Review" >
+    update review
+    <set >
+      <if test="recontent != null" >
+        recontent = #{recontent,jdbcType=VARCHAR},
+      </if>
+      <if test="reviewtime != null" >
+        reviewtime = #{reviewtime,jdbcType=VARCHAR},
+      </if>
+      <if test="reuid != null" >
+        reuid = #{reuid,jdbcType=INTEGER},
+      </if>
+      <if test="mid != null" >
+        mid = #{mid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where reid = #{reid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bs.bean.Review" >
+    update review
+    set recontent = #{recontent,jdbcType=VARCHAR},
+      reviewtime = #{reviewtime,jdbcType=VARCHAR},
+      reuid = #{reuid,jdbcType=INTEGER},
+      mid = #{mid,jdbcType=VARCHAR}
+    where reid = #{reid,jdbcType=INTEGER}
+  </update>
+</mapper>

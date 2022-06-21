@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bs.dao.OrganizationalLifeMapper" >
+  <resultMap id="BaseResultMap" type="com.bs.bean.OrganizationalLife" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="organizational_unit" property="organizationalUnit" jdbcType="VARCHAR" />
+    <result column="activity_name" property="activityName" jdbcType="VARCHAR" />
+    <result column="person_charge" property="personCharge" jdbcType="VARCHAR" />
+    <result column="activity_time" property="activityTime" jdbcType="VARCHAR" />
+    <result column="peoplenumber" property="peoplenumber" jdbcType="VARCHAR" />
+    <result column="activity_content" property="activityContent" jdbcType="VARCHAR" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="place" property="place" jdbcType="VARCHAR" />
+    <collection  property="lifeFile" ofType="com.bs.bean.LifeFile" javaType="ArrayList">
+      <result column="id" property="fid" jdbcType="INTEGER" />
+      <result column="contentfile" property="contentfile" jdbcType="VARCHAR" />
+      <result column="olifeid" property="olifeid" jdbcType="INTEGER" />
+      <result column="filetype" property="filetype" jdbcType="VARCHAR" />
+    </collection >
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    organizational_life.id, organizational_unit, activity_name, person_charge, activity_time, peoplenumber, 
+    activity_content, remarks, place
+  </sql>
+  <sql id="LifeFile_Column_List" >
+   life_file.id, contentfile, olifeid, filetype
+  </sql>
+  <sql id="condition_where">
+		<where>
+		    <if test="organunit != null and organunit != ''">
+				and organizational_unit like '%${organunit}%'
+			</if>
+			<if test="actname != null and actname != ''">
+				and activity_name=#{actname}
+			</if>
+			<if test="personcha != null and personcha != ''">
+				and person_charge=#{personcha}
+			</if>
+			<if test="acttime != null and acttime != ''">
+				and activity_time=#{acttime}
+			</if>
+			
+		</where>
+	</sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bs.bean.OrganizationalLifeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from organizational_life
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from organizational_life
+    <include refid="condition_where"></include>
+    limit #{start}, #{size}
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from organizational_life
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByname" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from organizational_life
+    where activity_name = #{activityName,jdbcType=VARCHAR}
+  </select>
+  <select id="count" resultType="java.lang.Integer" parameterType="java.lang.Integer" >
+    select count(*)
+    from organizational_life
+    <include refid="condition_where"></include>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from organizational_life
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bs.bean.OrganizationalLifeExample" >
+    delete from organizational_life
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bs.bean.OrganizationalLife" >
+    insert into organizational_life (id, organizational_unit, activity_name, 
+      person_charge, activity_time, peoplenumber, 
+      activity_content, remarks, place
+      )
+    values (#{id,jdbcType=INTEGER}, #{organizationalUnit,jdbcType=VARCHAR}, #{activityName,jdbcType=VARCHAR}, 
+      #{personCharge,jdbcType=VARCHAR}, #{activityTime,jdbcType=VARCHAR}, #{peoplenumber,jdbcType=VARCHAR}, 
+      #{activityContent,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, #{place,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.bs.bean.OrganizationalLife" >
+    insert into organizational_life
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="organizationalUnit != null" >
+        organizational_unit,
+      </if>
+      <if test="activityName != null" >
+        activity_name,
+      </if>
+      <if test="personCharge != null" >
+        person_charge,
+      </if>
+      <if test="activityTime != null" >
+        activity_time,
+      </if>
+      <if test="peoplenumber != null" >
+        peoplenumber,
+      </if>
+      <if test="activityContent != null" >
+        activity_content,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+      <if test="place != null" >
+        place,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="organizationalUnit != null" >
+        #{organizationalUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="activityName != null" >
+        #{activityName,jdbcType=VARCHAR},
+      </if>
+      <if test="personCharge != null" >
+        #{personCharge,jdbcType=VARCHAR},
+      </if>
+      <if test="activityTime != null" >
+        #{activityTime,jdbcType=VARCHAR},
+      </if>
+      <if test="peoplenumber != null" >
+        #{peoplenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="activityContent != null" >
+        #{activityContent,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="place != null" >
+        #{place,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bs.bean.OrganizationalLifeExample" resultType="java.lang.Integer" >
+    select count(*) from organizational_life
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update organizational_life
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.organizationalUnit != null" >
+        organizational_unit = #{record.organizationalUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activityName != null" >
+        activity_name = #{record.activityName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.personCharge != null" >
+        person_charge = #{record.personCharge,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activityTime != null" >
+        activity_time = #{record.activityTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.peoplenumber != null" >
+        peoplenumber = #{record.peoplenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activityContent != null" >
+        activity_content = #{record.activityContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remarks != null" >
+        remarks = #{record.remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="record.place != null" >
+        place = #{record.place,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update organizational_life
+    set id = #{record.id,jdbcType=INTEGER},
+      organizational_unit = #{record.organizationalUnit,jdbcType=VARCHAR},
+      activity_name = #{record.activityName,jdbcType=VARCHAR},
+      person_charge = #{record.personCharge,jdbcType=VARCHAR},
+      activity_time = #{record.activityTime,jdbcType=VARCHAR},
+      peoplenumber = #{record.peoplenumber,jdbcType=VARCHAR},
+      activity_content = #{record.activityContent,jdbcType=VARCHAR},
+      remarks = #{record.remarks,jdbcType=VARCHAR},
+      place = #{record.place,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bs.bean.OrganizationalLife" >
+    update organizational_life
+    <set >
+      <if test="organizationalUnit != null" >
+        organizational_unit = #{organizationalUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="activityName != null" >
+        activity_name = #{activityName,jdbcType=VARCHAR},
+      </if>
+      <if test="personCharge != null" >
+        person_charge = #{personCharge,jdbcType=VARCHAR},
+      </if>
+      <if test="activityTime != null" >
+        activity_time = #{activityTime,jdbcType=VARCHAR},
+      </if>
+      <if test="peoplenumber != null" >
+        peoplenumber = #{peoplenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="activityContent != null" >
+        activity_content = #{activityContent,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="place != null" >
+        place = #{place,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bs.bean.OrganizationalLife" >
+    update organizational_life
+    set organizational_unit = #{organizationalUnit,jdbcType=VARCHAR},
+      activity_name = #{activityName,jdbcType=VARCHAR},
+      person_charge = #{personCharge,jdbcType=VARCHAR},
+      activity_time = #{activityTime,jdbcType=VARCHAR},
+      peoplenumber = #{peoplenumber,jdbcType=VARCHAR},
+      activity_content = #{activityContent,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      place = #{place,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
